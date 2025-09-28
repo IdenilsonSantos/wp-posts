@@ -8,12 +8,13 @@ import { AuthController } from './controllers/auth.controller';
 import { User } from '../user/entities/user.entity';
 import { UserModule } from '../user/user.module';
 import { StructuredLogger } from '../logger/structured.logger';
+import { JwtStrategy } from './guard/jwt-strategy';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     UserModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,7 +24,7 @@ import { StructuredLogger } from '../logger/structured.logger';
       }),
     }),
   ],
-  providers: [AuthService, StructuredLogger],
+  providers: [AuthService, JwtStrategy, StructuredLogger],
   controllers: [AuthController],
   exports: [AuthService],
 })

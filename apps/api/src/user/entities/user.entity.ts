@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,7 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Order } from '../../orders/entities/order.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -19,8 +21,12 @@ export class User {
   @Column()
   email!: string;
 
+  @Exclude()
   @Column()
   password!: string;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders!: Order[];
 
   @CreateDateColumn()
   createdAt?: Date;
