@@ -1,14 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../auth.module';
 import { User } from '../../user/entities/user.entity';
+import { Order } from '../../orders/entities/order.entity';
 import { ConfigModule } from '@nestjs/config';
 import { StructuredLogger } from '../../logger/structured.logger';
+import { Repository } from 'typeorm';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
+  let userRepo: Repository<User>;
 
   const mockLogger = {
     log: jest.fn(),
@@ -26,7 +29,7 @@ describe('AuthController (e2e)', () => {
           type: 'sqlite',
           database: ':memory:',
           dropSchema: true,
-          entities: [User],
+          entities: [User, Order],
           synchronize: true,
         }),
         AuthModule,
@@ -38,6 +41,8 @@ describe('AuthController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
 
+    userRepo = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
+
     app.setGlobalPrefix('api');
     await app.init();
   });
@@ -47,8 +52,7 @@ describe('AuthController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    const repo = app.get('UserRepository');
-    await repo.query(`DELETE FROM user;`);
+    await userRepo.query(`DELETE FROM user;`);
   });
 
   it('/api/auth/signup (POST) - should create a new user', async () => {
