@@ -7,6 +7,7 @@ import { OrdersModule } from './orders/order.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 import { PostModule } from './posts/post.module';
+import { WpWebhookModule } from './webhook/webhook.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { PostModule } from './posts/post.module';
     UserModule,
     OrdersModule,
     PostModule,
+    WpWebhookModule,
   ],
 })
 export class AppModule {}
