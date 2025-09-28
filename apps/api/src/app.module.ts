@@ -4,6 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/order.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
+import { PostModule } from './posts/post.module';
 
 @Module({
   imports: [
@@ -22,9 +25,20 @@ import { OrdersModule } from './orders/order.module';
             : false,
       }),
     }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        store: redisStore,
+        host: config.get<string>('REDIS_HOST', 'localhost'),
+        port: config.get<number>('REDIS_PORT', 6379),
+        ttl: config.get<number>('CACHE_TTL', 600),
+      }),
+    }),
     AuthModule,
     UserModule,
     OrdersModule,
+    PostModule,
   ],
 })
 export class AppModule {}
