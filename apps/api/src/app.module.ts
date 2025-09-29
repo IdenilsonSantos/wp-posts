@@ -17,11 +17,16 @@ import { WpWebhookModule } from './webhook/webhook.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        url: config.get<string>('DATABASE_URL'),
+        host: config.get<string>('POSTGRES_HOST', 'postgres'),
+        port: config.get<number>('POSTGRES_PORT', 5432),
+        username: config.get<string>('POSTGRES_USER'),
+        password: config.get<string>('POSTGRES_PASSWORD'),
+        database: config.get<string>('POSTGRES_DB'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: config.get<string>('NODE_ENV') === 'development',
+        migrations: [__dirname + '/migrations/*.js'],
         ssl:
-          process.env.NODE_ENV === 'production'
+          config.get<string>('NODE_ENV') === 'production'
             ? { rejectUnauthorized: false }
             : false,
       }),
@@ -31,7 +36,7 @@ import { WpWebhookModule } from './webhook/webhook.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         store: redisStore,
-        host: config.get<string>('REDIS_HOST', 'localhost'),
+        host: config.get<string>('REDIS_HOST', 'redis'),
         port: config.get<number>('REDIS_PORT', 6379),
         ttl: config.get<number>('CACHE_TTL', 600),
       }),
