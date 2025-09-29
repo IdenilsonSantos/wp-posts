@@ -36,7 +36,7 @@ export class PostCacheService {
     private postRepo: Repository<PostsCache>,
   ) {
     this.wpClient = axios.create({
-      baseURL: 'http://localhost:3005',
+      baseURL: `http://${this.configService.get('JSON_SERVER_HOST', 'json-server')}:${this.configService.get('JSON_SERVER_PORT', 3005)}`,
       timeout: 5000,
     });
 
