@@ -23,7 +23,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private hashPassword(password: string): string {
+  hashPassword(password: string): string {
     return crypto.createHash('sha256').update(password).digest('hex');
   }
 
