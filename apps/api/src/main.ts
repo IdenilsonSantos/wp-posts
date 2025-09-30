@@ -16,6 +16,11 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  });
+
   app.useGlobalInterceptors(new CorrelationIdInterceptor());
 
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
