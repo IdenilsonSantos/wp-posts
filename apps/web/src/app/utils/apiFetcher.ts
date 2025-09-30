@@ -1,0 +1,43 @@
+type FetchOptions<T> = {
+  method?: "GET" | "POST" | "PUT" | "DELETE";
+  body?: T;
+  headers?: Record<string, string>;
+  token?: string;
+};
+
+export async function apiFetch<T, R>(
+  url: string,
+  options: FetchOptions<T> = {}
+): Promise<R> {
+  try {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...options.headers,
+    };
+
+    if (options.token) {
+      headers["Authorization"] = `Bearer ${options.token}`;
+    }
+
+    const response = await fetch(url, {
+      method: options.method || "GET",
+      headers,
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Erro na requisição");
+    }
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return (await response.json()) as R;
+    } else {
+      return (await response.text()) as unknown as R;
+    }
+  } catch (err) {
+    console.error("fetch error:", err);
+    throw err;
+  }
+}
