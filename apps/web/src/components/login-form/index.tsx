@@ -28,6 +28,12 @@ const LoginForm = () => {
     resolver: zodResolver(schema),
   });
 
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push("/signup");
+  };
+
   const onSubmit = async (data: FormData) => {
     try {
       const result = await apiFetch<LoginData, LoginResponse>(
@@ -39,16 +45,11 @@ const LoginForm = () => {
       );
 
       localStorage.setItem("access_token", result.access_token);
+      router.push("/orders");
     } catch (err) {
       console.error("Erro no login:", err);
       toast.error("Usuário ou senha inválidos");
     }
-  };
-
-  const router = useRouter();
-
-  const handleRedirect = () => {
-    router.push("/signup");
   };
 
   return (

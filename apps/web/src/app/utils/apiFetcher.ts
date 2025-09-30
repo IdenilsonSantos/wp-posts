@@ -5,7 +5,7 @@ type FetchOptions<T> = {
   token?: string;
 };
 
-export async function apiFetch<T, R>(
+export async function apiFetch<T = unknown, R = unknown>(
   url: string,
   options: FetchOptions<T> = {}
 ): Promise<R> {
