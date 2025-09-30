@@ -25,18 +25,25 @@ export async function apiFetch<T, R>(
       body: options.body ? JSON.stringify(options.body) : undefined,
     });
 
+    const contentType = response.headers.get("content-type");
+
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText || "Erro na requisição");
+      let errorMessage = "Erro na requisição";
+      if (contentType?.includes("application/json")) {
+        const errorJson = await response.json();
+        errorMessage = errorJson.message || JSON.stringify(errorJson);
+      } else {
+        errorMessage = await response.text();
+      }
+      throw new Error(errorMessage);
     }
 
-    const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       return (await response.json()) as R;
     } else {
       return (await response.text()) as unknown as R;
     }
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("fetch error:", err);
     throw err;
   }

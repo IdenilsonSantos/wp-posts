@@ -10,16 +10,17 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 const schema = z.object({
+  username: z.string().min(3, "Seu nome precisa ter no mínimo 3 caracteres"),
   email: z.string().email("Email inválido"),
   password: z.string().min(6, "A senha precisa ter no mínimo 6 caracteres"),
 });
 
-type LoginData = { email: string; password: string };
-type LoginResponse = { access_token: string };
+type SignUpData = { username: string; email: string; password: string };
+type SignUpResponse = { message: string };
 
 type FormData = z.infer<typeof schema>;
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const {
     register,
     handleSubmit,
@@ -28,27 +29,34 @@ const LoginForm = () => {
     resolver: zodResolver(schema),
   });
 
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push("/login");
+  };
+
   const onSubmit = async (data: FormData) => {
     try {
-      const result = await apiFetch<LoginData, LoginResponse>(
-        "http://localhost:3000/api/auth/login",
+      await apiFetch<SignUpData, SignUpResponse>(
+        "http://localhost:3000/api/auth/signup",
         {
           method: "POST",
           body: data,
         }
       );
 
-      localStorage.setItem("access_token", result.access_token);
-    } catch (err) {
-      console.error("Erro no login:", err);
-      toast.error("Usuário ou senha inválidos");
+      toast.success("Usuário criado com sucesso");
+
+      handleRedirect();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        if (err.message?.includes("is already in use")) {
+          toast.error("O email já foi cadastrado");
+        }
+      } else {
+        console.error("Erro no signup:", err);
+      }
     }
-  };
-
-  const router = useRouter();
-
-  const handleRedirect = () => {
-    router.push("/signup");
   };
 
   return (
@@ -56,10 +64,10 @@ const LoginForm = () => {
       <div className="w-full min-w-[400px] bg-gray-800 rounded-lg shadow-md p-6 min-h-[400px] flex flex-col justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-white text-center">
-            Login
+            Cadastrar
           </h2>
           <p className="mt-2 text-center text-gray-400">
-            Entre com a sua conta
+            Vamos cadastrar seu usuário
           </p>
         </div>
 
@@ -67,6 +75,14 @@ const LoginForm = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="mt-4 flex flex-col gap-4"
         >
+          <Input
+            id="username"
+            label="Nome"
+            placeholder="Nome"
+            register={register("username")}
+            error={errors.username}
+          />
+
           <Input
             id="email"
             label="Email"
@@ -87,21 +103,21 @@ const LoginForm = () => {
 
           <div className="flex flex-col gap-2 mt-2">
             <Button type="submit" variant="success" className="cursor-pointer">
-              Entrar
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              className="cursor-pointer"
-              onClick={handleRedirect}
-            >
-              Cadastrar
+              Confirmar
             </Button>
           </div>
+          <Button
+            type="button"
+            variant="secondary"
+            className="cursor-pointer"
+            onClick={handleRedirect}
+          >
+            Login
+          </Button>
         </form>
       </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default SignUpForm;
