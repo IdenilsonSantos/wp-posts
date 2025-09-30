@@ -49,7 +49,7 @@ export class AuthService {
       where: { email },
     });
     if (existingUser) {
-      throw new BadRequestException(`Email "${email}" is already in use`);
+      throw new BadRequestException(`Email is already in use`);
     }
 
     const user = this.userRepository.create({
