@@ -81,12 +81,22 @@ export class PostCacheService {
       } as any);
 
       for (const post of posts) {
+        const id = Number(post.id_wp);
+
+        if (isNaN(id)) {
+          continue;
+        }
+
+        const exists = await this.postRepo.findOne({ where: { id_wp: id } });
+        if (exists) continue;
+
         const postData = this.postRepo.create({
-          id_wp: +post.id_wp,
+          id_wp: id,
           title: post.title,
           slug: post.slug ?? null,
           excerpt: post.excerpt ?? null,
         });
+
         await this.postRepo.save(postData);
       }
     }

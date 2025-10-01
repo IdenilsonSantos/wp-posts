@@ -10,18 +10,20 @@ export class PostsCacheController {
     @Query('search') search?: string,
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
+    @Query('forceRefresh') forceRefresh?: string,
   ) {
     try {
       const posts = await this.PostCacheService.findAll(
         search,
         Number(page) || 1,
         Number(pageSize) || 10,
+        { forceRefresh: forceRefresh === 'true' },
       );
 
       return {
         statusCode: HttpStatus.OK,
         message: 'Posts retrieved successfully',
-        data: posts,
+        ...posts,
       };
     } catch (error: unknown) {
       const errorMessage =
