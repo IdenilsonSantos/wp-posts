@@ -1,8 +1,7 @@
-import React from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   register: UseFormRegisterReturn;
   error?: FieldError;
 }
@@ -15,9 +14,11 @@ export const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   return (
-    <div className="flex flex-col mb-2">
+    <div className="flex flex-col mb-2 w-full">
       <fieldset className="fieldset w-full">
-        <legend className="fieldset-legend text-gray-300">{label}</legend>
+        {label && (
+          <legend className="fieldset-legend text-gray-300">{label}</legend>
+        )}
 
         <input
           id={id}

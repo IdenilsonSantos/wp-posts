@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "success";
   loading?: boolean;
@@ -13,7 +11,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    "btn w-full py-2 px-4 rounded-md text-white transition-colors focus:outline-none flex items-center justify-center gap-2";
+    "btn py-2 px-4 rounded-md text-white transition-colors focus:outline-none flex items-center justify-center gap-2";
 
   const variants: Record<string, string> = {
     primary: "bg-gray-700 hover:bg-gray-600",

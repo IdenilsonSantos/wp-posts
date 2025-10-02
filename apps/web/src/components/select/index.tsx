@@ -1,5 +1,4 @@
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
-import React from "react";
 
 interface Option {
   label: string;
