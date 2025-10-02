@@ -34,10 +34,10 @@ const Navbar: FC<NavbarProps> = ({
             <ul className="hidden md:flex space-x-6 items-center">
               {links.map((link) => (
                 <li key={link.href}>
-                  {link.name === "Sair" && pathname.includes("wp") ? (
+                  {link.name === "Sair" ? (
                     <Button
                       onClick={() => {
-                        localStorage.removeItem("token");
+                        localStorage.removeItem("access_token");
                         router.push("/login");
                       }}
                       variant="success"

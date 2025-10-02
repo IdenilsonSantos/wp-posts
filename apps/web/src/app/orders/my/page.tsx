@@ -1,6 +1,6 @@
 "use client";
 
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 import { apiFetch } from "@/app/utils/apiFetcher";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/navbar";
@@ -17,7 +17,7 @@ interface ApiResponse {
 }
 
 export default function MyOrders() {
-  const token = localStorage.getItem("access_token") || undefined;
+  const [token, setToken] = useState<string | undefined>();
 
   const { data, isLoading, isError } = useQuery<ApiResponse>({
     queryKey: ["myOrders", token],
@@ -28,6 +28,11 @@ export default function MyOrders() {
       }),
     enabled: !!token,
   });
+
+  useEffect(() => {
+    const tokenFromStorage = localStorage.getItem("access_token");
+    if (tokenFromStorage) setToken(tokenFromStorage);
+  }, []);
 
   const getStatus = (status: string) => {
     const statusMap: Record<string, JSX.Element> = {

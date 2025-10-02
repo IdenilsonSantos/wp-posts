@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Resolver, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
@@ -14,10 +14,7 @@ const schema = z.object({
   productSku: z
     .string()
     .min(3, "O código do produto deve ter no mínimo 3 caracteres"),
-  qty: z.preprocess(
-    (val) => Number(val),
-    z.number().int().min(1, "A quantidade mínima é 1")
-  ),
+  qty: z.coerce.number().int().min(1, "A quantidade mínima é 1"),
   status: z.string().refine((val) => ["PENDING", "PAID"].includes(val), {
     message: "Selecione um status válido (Pendente ou Pago)",
   }),
@@ -36,11 +33,12 @@ export default function Orders() {
     formState: { errors },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as Resolver<FormData>,
   });
 
   useEffect(() => {
-    setToken(localStorage?.getItem("access_token") || undefined);
+    const tokenFromStorage = localStorage.getItem("access_token");
+    if (tokenFromStorage) setToken(tokenFromStorage);
   }, []);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
