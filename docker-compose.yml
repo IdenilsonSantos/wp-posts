@@ -1,11 +1,12 @@
 version: "3.9"
 
 services:
+
   api:
     build:
       context: ./apps/api
       dockerfile: Dockerfile
-    container_name: igrpcom
+    container_name: igrpcom-api
     ports:
       - "3000:3000"
     env_file:
@@ -14,6 +15,24 @@ services:
       - postgres
       - redis
       - json-server
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: igrpcom-web
+    ports:
+      - "3002:3000"
+    env_file:
+      - ./apps/web/.env
+    depends_on:
+      - api
+      - redis
+      - postgres
+    environment:
+      - API_URL=http://api:3000
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
 
   postgres:
     image: postgres:15-alpine
