@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { links } from "@/app/utils/constants/menuLinks";
 import { Button } from "../button";
+import { useLogout } from "@/hooks/useLogout";
 
 interface NavbarProps {
   logoText?: string;
@@ -16,8 +17,8 @@ const Navbar: FC<NavbarProps> = ({
   showLinks = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const logout = useLogout();
 
-  const router = useRouter();
   const pathname = usePathname();
 
   const getLinkClass = (href: string) =>
@@ -36,10 +37,7 @@ const Navbar: FC<NavbarProps> = ({
                 <li key={link.href}>
                   {link.name === "Sair" ? (
                     <Button
-                      onClick={() => {
-                        localStorage.removeItem("access_token");
-                        router.push("/login");
-                      }}
+                      onClick={logout}
                       variant="success"
                       className="cursor-pointer text-white"
                     >

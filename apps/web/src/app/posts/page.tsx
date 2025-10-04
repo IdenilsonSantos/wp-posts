@@ -7,6 +7,7 @@ import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { apiFetch } from "@/app/utils/apiFetcher";
 import Navbar from "@/components/navbar";
+import { ErrorBoundaryCustom } from "@/components/errorBondary";
 
 interface Post {
   id: number;
@@ -36,7 +37,7 @@ export default function Posts() {
     queryKey: ["posts", search, page],
     queryFn: async () =>
       apiFetch<unknown, ApiResponse>(
-        `http://localhost:3000/api/content/posts?search=${search}&page=${page}&per_page=5`,
+        `${process.env.NEXT_PUBLIC_API_URL}content/posts?search=${search}&page=${page}&per_page=5`,
         {
           method: "GET",
         }
@@ -52,7 +53,7 @@ export default function Posts() {
   };
 
   return (
-    <>
+    <ErrorBoundaryCustom fallback={<p>Ops, algo deu errado 😢</p>}>
       <Navbar logoText="Meus Posts" showLinks={false} />
       <div className="container mx-auto p-4">
         <div className="w-full p-8 flex flex-col justify-center">
@@ -110,7 +111,7 @@ export default function Posts() {
                     </td>
                   </tr>
                 ) : (
-                  posts.map((post) => (
+                  posts?.map((post) => (
                     <tr
                       key={post.id}
                       className="odd:bg-gray-800 even:bg-gray-700 hover:bg-gray-600 transition-colors"
@@ -155,6 +156,6 @@ export default function Posts() {
           )}
         </div>
       </div>
-    </>
+    </ErrorBoundaryCustom>
   );
 }

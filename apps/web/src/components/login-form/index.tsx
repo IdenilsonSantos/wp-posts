@@ -14,10 +14,8 @@ const schema = z.object({
   password: z.string().min(6, "A senha precisa ter no mínimo 6 caracteres"),
 });
 
-type LoginData = { email: string; password: string };
-type LoginResponse = { access_token: string };
-
 type FormData = z.infer<typeof schema>;
+type LoginResponse = { access_token: string };
 
 const LoginForm = () => {
   const {
@@ -36,15 +34,23 @@ const LoginForm = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const result = await apiFetch<LoginData, LoginResponse>(
-        "http://localhost:3000/api/auth/login",
+      const result = await apiFetch<FormData, LoginResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}auth/login`,
         {
           method: "POST",
           body: data,
         }
       );
 
-      localStorage.setItem("access_token", result.access_token);
+      await apiFetch<{ token: string }, { success: boolean }>(
+        "/api/set-token",
+        {
+          method: "POST",
+          body: { token: result.access_token },
+        }
+      );
+
+      toast.success("Login realizado com sucesso!");
       router.push("/orders");
     } catch (err) {
       console.error("Erro no login:", err);

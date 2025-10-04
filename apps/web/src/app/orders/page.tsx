@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import SelectInput from "@/components/select";
 import Navbar from "@/components/navbar";
+import { apiFetch } from "../utils/apiFetcher";
 
 const schema = z.object({
   productSku: z
@@ -37,8 +38,13 @@ export default function Orders() {
   });
 
   useEffect(() => {
-    const tokenFromStorage = localStorage.getItem("access_token");
-    if (tokenFromStorage) setToken(tokenFromStorage);
+    async function fetchToken() {
+      const res = await apiFetch<undefined, { token: string | undefined }>(
+        "/api/get-token"
+      );
+      setToken(res.token);
+    }
+    fetchToken();
   }, []);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {

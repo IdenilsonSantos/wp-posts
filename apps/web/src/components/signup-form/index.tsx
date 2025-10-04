@@ -38,7 +38,7 @@ const SignUpForm = () => {
   const onSubmit = async (data: FormData) => {
     try {
       await apiFetch<SignUpData, SignUpResponse>(
-        "http://localhost:3000/api/auth/signup",
+        "${process.env.NEXT_PUBLIC_API_URL}auth/signup",
         {
           method: "POST",
           body: data,

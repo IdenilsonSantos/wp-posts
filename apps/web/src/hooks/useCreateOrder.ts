@@ -19,7 +19,7 @@ export function useCreateOrder(token?: string) {
   return useMutation<CreateOrderResponse, Error, CreateOrderData>({
     mutationFn: async (data) =>
       await apiFetch<CreateOrderData, CreateOrderResponse>(
-        "http://localhost:3000/api/orders",
+        `${process.env.NEXT_PUBLIC_API_URL}orders`,
         {
           method: "POST",
           body: data,

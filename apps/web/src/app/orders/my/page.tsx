@@ -22,17 +22,27 @@ export default function MyOrders() {
   const { data, isLoading, isError } = useQuery<ApiResponse>({
     queryKey: ["myOrders", token],
     queryFn: async () =>
-      apiFetch<unknown, ApiResponse>("http://localhost:3000/api/orders/my/", {
-        method: "GET",
-        token,
-      }),
+      apiFetch<unknown, ApiResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}orders/my`,
+        {
+          method: "GET",
+          token,
+        }
+      ),
     enabled: !!token,
   });
 
   useEffect(() => {
-    const tokenFromStorage = localStorage.getItem("access_token");
-    if (tokenFromStorage) setToken(tokenFromStorage);
+    async function fetchToken() {
+      const res = await apiFetch<undefined, { token: string | undefined }>(
+        "/api/get-token"
+      );
+      setToken(res.token);
+    }
+    fetchToken();
   }, []);
+
+  console.log(token);
 
   const getStatus = (status: string) => {
     const statusMap: Record<string, JSX.Element> = {
