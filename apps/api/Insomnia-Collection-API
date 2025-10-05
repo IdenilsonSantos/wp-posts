@@ -1,0 +1,286 @@
+type: collection.insomnia.rest/5.0
+name: Portal
+meta:
+  id: wrk_763c3a8dca33445791e46775340c6455
+  created: 1759062202161
+  modified: 1759062202161
+  description: ""
+collection:
+  - name: Auth
+    meta:
+      id: fld_aca399a19a8a4ea69665a9696f7b89b5
+      created: 1759062734315
+      modified: 1759062734315
+      sortKey: -1759062734315
+      description: ""
+    children:
+      - url: "{{ _.localhost }}auth/signup"
+        name: Register
+        meta:
+          id: req_531f9422f1d94d81b366486341a39c01
+          created: 1759062212688
+          modified: 1759263416802
+          isPrivate: false
+          description: ""
+          sortKey: -1759062742236
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"username": "João da Silva2",
+            	"email": "joaosilv3a@joao22.com",
+            	"password": "12345678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.localhost }}auth/login"
+        name: Login
+        meta:
+          id: req_14aa204f97aa4699bd4a0e818e7fd586
+          created: 1759062766519
+          modified: 1759142891047
+          isPrivate: false
+          description: ""
+          sortKey: -1758550264385
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "joaosilva@joao22.com",
+            	"password": "12345678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Orders
+    meta:
+      id: fld_a52eeaf07a5a4c2ab074fd809a337078
+      created: 1759062800246
+      modified: 1759062800246
+      sortKey: -1759062800246
+      description: ""
+    children:
+      - url: "{{ _.localhost }}orders"
+        name: Create
+        meta:
+          id: req_ce64676e3df847ddbc9950aa7a044c35
+          created: 1759062803579
+          modified: 1759675342793
+          isPrivate: false
+          description: ""
+          sortKey: -1759062803579
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                  "productSku": "78",
+                  "qty": 3,
+                  "status": "PENDING"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.localhost }}orders/my"
+        name: Find By Me
+        meta:
+          id: req_d67d3ef8978f494bb3dd83dd624aac23
+          created: 1759063097342
+          modified: 1759675331642
+          isPrivate: false
+          description: ""
+          sortKey: -1759062772907.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.localhost }}orders/3ebea05e-a943-44ae-a982-5feb02e7dc3a"
+        name: Update
+        meta:
+          id: req_fc25e1e461c04b0c834805b6f431e926
+          created: 1759067197494
+          modified: 1759675337901
+          isPrivate: false
+          description: ""
+          sortKey: -1759062788243.25
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                  "productSku": "787878787878787878",
+                  "qty": 3,
+                  "status": "PAID"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: WebHook
+    meta:
+      id: fld_c3286d22c7c34fecb787a5c95ce5336d
+      created: 1759146498797
+      modified: 1759146498797
+      sortKey: -1759062767280.5
+      description: ""
+    children:
+      - url: "{{ _.localhost }}wp/webhook"
+        name: Create
+        meta:
+          id: req_adda829a58ee4b63bf67f9fb215ab822
+          created: 1759146498802
+          modified: 1759675348808
+          isPrivate: false
+          description: ""
+          sortKey: -1759062803579
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                  "title": "TESTANDO ACRIACAO",
+            			"excerpt": "TESTE",
+            			"slug": "TTE"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Posts
+    meta:
+      id: fld_cf1f69e9bdcc4bc883774e80c19f2cbf
+      created: 1759146640481
+      modified: 1759146640481
+      sortKey: -1759146640481
+      description: ""
+    children:
+      - url: "{{ _.localhost }}content/posts"
+        name: Get All From Api
+        meta:
+          id: req_470b1553a91c4f2db8e14c8a00b09414
+          created: 1759071238194
+          modified: 1759675245887
+          isPrivate: false
+          description: ""
+          sortKey: -1759146645750
+        method: GET
+        parameters:
+          - id: pair_38cf55e8e4dc4618bca6a224aee49ae0
+            name: page
+            value: "3"
+            description: ""
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3005/posts
+        name: Get All From Json-server
+        meta:
+          id: req_a070e4aade77404581ceb11c96097536
+          created: 1759353847843
+          modified: 1759675265253
+          isPrivate: false
+          description: ""
+          sortKey: -1759146645650
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_623a62c0824ba1a528bd501959b28cea21c1ebd0
+    created: 1759062202168
+    modified: 1759062202168
+environments:
+  name: Base Environment
+  meta:
+    id: env_623a62c0824ba1a528bd501959b28cea21c1ebd0
+    created: 1759062202165
+    modified: 1759062654242
+    isPrivate: false
+  data:
+    localhost: http://localhost:3000/api/

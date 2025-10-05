@@ -22,4 +22,6 @@ RUN chmod +x ./start.sh
 
 ENV NODE_ENV=development
 
+EXPOSE 3000
+
 ENTRYPOINT ["sh", "./start.sh"]
