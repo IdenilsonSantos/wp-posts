@@ -57,6 +57,8 @@ O webhook para acessar os posts está na rota `content/posts`, é uma roda de cr
 "slug": TEC
 }
 
+Dentro da pasta está o arquivo da collection do insomnia, contendo todas as rotas utilizadas.
+
 ###### 🌐 Frontend
 
 Repita o processo para a aplicação Next.js:
