@@ -34,7 +34,7 @@ O ambiente local é orquestrado via **Docker Compose**:
 1️⃣ Clone o Repositório
 `git clone https://github.com/IdenilsonSantos/wp-posts.git`
 
-e entre na pasta, cd portal-instituto-grpcom
+e entre na pasta, cd wp-posts
 
 2️⃣ Configurar Variáveis de Ambiente
 
